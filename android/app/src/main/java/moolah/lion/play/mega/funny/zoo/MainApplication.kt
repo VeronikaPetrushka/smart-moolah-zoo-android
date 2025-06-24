@@ -1,4 +1,4 @@
-package com.smartmoolahzoo
+package moolah.lion.play.mega.funny.zoo
 
 import android.app.Application
 import com.facebook.react.PackageList

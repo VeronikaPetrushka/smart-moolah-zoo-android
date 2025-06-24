@@ -5,7 +5,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { zoo, form, card } from '../smartconstszoo/smartstyles';
 import { lion, nothingadded } from '../smartimprtszoo/smartimgszoo';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
 import { format } from 'date-fns';
 

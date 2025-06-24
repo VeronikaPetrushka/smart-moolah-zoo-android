@@ -1,4 +1,4 @@
-package com.smartmoolahzoo
+package moolah.lion.play.mega.funny.zoo
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

@@ -1,10 +1,33 @@
-import React, { JSX } from 'react';
+import React, { useEffect, useState, JSX } from 'react';
+import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import smartscrnszoo from './Zoo/smartimprtszoo/smartscrnszoo';
 
 enableScreens();
+
+const requestStoragePermission = async () => {
+    if (Platform.OS === 'android' && Platform.Version < 33) {
+        try {
+        const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+            title: 'Storage Permission',
+            message: 'App needs access to storage to export PDF reports',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+            }
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+        } catch (err) {
+        console.warn(err);
+        return false;
+        }
+    }
+    return true;
+};
 
 type RootStackParamList = {
   Smartaddanimal: undefined;
@@ -28,6 +51,22 @@ type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 function App(): JSX.Element {
+    const [hasStoragePermission, setHasStoragePermission] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        async function checkPermission() {
+        const granted = await requestStoragePermission();
+        setHasStoragePermission(granted);
+        if (!granted) {
+            Alert.alert(
+            'Permission required',
+            'Storage permission is needed to export PDF reports.',
+            [{ text: 'OK' }]
+            );
+        }
+        }
+        checkPermission();
+    }, []);
 
   return (
       <NavigationContainer>

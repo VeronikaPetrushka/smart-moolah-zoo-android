@@ -23,18 +23,18 @@
 	<key>CFBundleVersion</key>
 	<string>2</string>
 	<key>LSRequiresIPhoneOS</key>
-	<true />
+	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-		<false />
+		<false/>
 		<key>NSAllowsLocalNetworking</key>
-		<true />
+		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string />
+	<string/>
 	<key>RCTNewArchEnabled</key>
-	<true />
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -48,15 +48,15 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false />
+	<false/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs access to your photo library to upload animal photos and share reports</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This app needs permission to save reports to your photo library</string>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true />
+	<true/>
 	<key>UIFileSharingEnabled</key>
-	<true />
+	<true/>
 	<key>NSDocumentsFolderUsageDescription</key>
 	<string>This app needs access to documents folder to save and manage reports</string>
 	<key>NSDownloadsFolderUsageDescription</key>
