@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, ScrollView, Alert, TextInput } fro
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchImageLibrary } from 'react-native-image-picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { zoo, form } from '../smartconstszoo/smartstyles';
 import { backbutton, checked, clear, holder } from '../smartimprtszoo/smartimgszoo';
 
@@ -20,6 +20,28 @@ const Smartaddanimal = ({ animal }) => {
     const [rarespecies, setRarespecies] = useState(animal ? animal.rarespecies : false);
     const [type, setType] = useState(animal ? animal.type : null);
     const [description, setDescription] = useState(animal ? animal.description : null);
+    const [activePicker, setActivePicker] = useState(null); // 'arrival' | 'event' | null
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    const showUnifiedDatePicker = (field) => {
+        setActivePicker(field);
+        setDatePickerVisibility(true);
+    };
+
+    const hideUnifiedDatePicker = () => {
+        setDatePickerVisibility(false);
+        setActivePicker(null);
+    };
+
+    const handleUnifiedConfirm = (selectedDate) => {
+        const trimmed = new Date(selectedDate.setHours(0, 0, 0, 0));
+        if (activePicker === 'arrival') {
+            setArrivaldate(trimmed);
+        } else if (activePicker === 'event') {
+            setDate(trimmed);
+        }
+        hideUnifiedDatePicker();
+    };
 
     const smartDateparserzoo = (input) => {
         if (!input) return new Date();
@@ -124,13 +146,23 @@ const Smartaddanimal = ({ animal }) => {
                         </TouchableOpacity>
 
                         <Text style={form.label}>Arrival date</Text>
-                        <DateTimePicker 
-                            value={arrivaldate} 
-                            mode="date" 
-                            display="spinner" 
+                        <TouchableOpacity
+                            onPress={() => showUnifiedDatePicker('arrival')}
+                            style={[form.typeButton, {justifyContent: 'flex-start', alignItems: 'flex-start'}]}
+                        >
+                            <Text style={form.typeButtonText}
+                            >
+                                {formatDate(arrivaldate)}
+                            </Text>
+                        </TouchableOpacity>
+        
+                        <DateTimePickerModal
+                            isVisible={isDatePickerVisible}
+                            mode="date"
+                            date={activePicker === 'arrival' ? arrivaldate : date}
+                            onConfirm={handleUnifiedConfirm}
+                            onCancel={hideUnifiedDatePicker}
                             themeVariant="dark"
-                            onChange={(event, selectedDate) => selectedDate && setArrivaldate(selectedDate)}
-                            style={{alignSelf: 'center', maxWidth: 280 }}
                         />
 
                         {[
@@ -238,15 +270,23 @@ const Smartaddanimal = ({ animal }) => {
                     <View style={{ width: '100%', flexGrow: 1 }}>
                         
                         <Text style={form.label}>Date</Text>
-                        <DateTimePicker 
-                            value={date} 
-                            mode="date" 
-                            display="spinner" 
+                        <TouchableOpacity
+                            onPress={() => showUnifiedDatePicker('event')}
+                            style={[form.typeButton, {justifyContent: 'flex-start', alignItems: 'flex-start'}]}
+                        >
+                            <Text style={form.typeButtonText}
+                            >
+                                {formatDate(date)}
+                            </Text>
+                        </TouchableOpacity>
+        
+                        <DateTimePickerModal
+                            isVisible={isDatePickerVisible}
+                            mode="date"
+                            date={activePicker === 'arrival' ? arrivaldate : date}
+                            onConfirm={handleUnifiedConfirm}
+                            onCancel={hideUnifiedDatePicker}
                             themeVariant="dark"
-                            onChange={(event, selectedDate) => {
-                                if (selectedDate) setDate(selectedDate);
-                            }} 
-                            style={{alignSelf: 'center', maxWidth: 280 }}
                         />
 
                         <Text style={form.label}>Description</Text>

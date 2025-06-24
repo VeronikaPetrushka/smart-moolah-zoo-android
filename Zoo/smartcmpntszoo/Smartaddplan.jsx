@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView, Alert, TextInput } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format } from 'date-fns';
 import { zoo, form, card } from '../smartconstszoo/smartstyles';
 import { backbutton, checked, setarow } from '../smartimprtszoo/smartimgszoo';
@@ -18,6 +18,23 @@ const Smartaddplan = ({ plan }) => {
 
     const [showTypes, setShowTypes] = useState(false);
     const [showFrequency, setShowFrequency] = useState(false);
+
+    const [isSmartPlanDatePickerVisible, setSmartPlanDatePickerVisible] = useState(false);
+    const [isSmartPlanTimePickerVisible, setSmartPlanTimePickerVisible] = useState(false);
+
+    const openSmartPlanDatePicker = () => setSmartPlanDatePickerVisible(true);
+    const closeSmartPlanDatePicker = () => setSmartPlanDatePickerVisible(false);
+    const confirmSmartPlanDate = (selectedDate) => {
+        setDate(selectedDate);
+        closeSmartPlanDatePicker();
+    };
+
+    const openSmartPlanTimePicker = () => setSmartPlanTimePickerVisible(true);
+    const closeSmartPlanTimePicker = () => setSmartPlanTimePickerVisible(false);
+    const confirmSmartPlanTime = (selectedTime) => {
+        setTime(selectedTime);
+        closeSmartPlanTimePicker();
+    };
 
     useFocusEffect(
         useCallback(() => {
@@ -243,23 +260,43 @@ const Smartaddplan = ({ plan }) => {
                         }
 
                         <Text style={[form.label, {marginTop: 12}]}>Date</Text>
-                        <DateTimePicker 
-                            value={date} 
-                            mode="date" 
-                            display="spinner" 
+                        <TouchableOpacity
+                            onPress={openSmartPlanDatePicker}
+                            style={[form.typeButton, {justifyContent: 'flex-start', alignItems: 'flex-start'}]}
+                        >
+                            <Text style={form.typeButtonText}>
+                                {format(date, 'dd.MM.yyyy')}
+                            </Text>
+                        </TouchableOpacity>
+
+                        <DateTimePickerModal
+                            isVisible={isSmartPlanDatePickerVisible}
+                            mode="date"
+                            date={date}
+                            onConfirm={confirmSmartPlanDate}
+                            onCancel={closeSmartPlanDatePicker}
+                            display="spinner"
                             themeVariant="dark"
-                            onChange={(event, selectedDate) => selectedDate && setDate(selectedDate)}
-                            style={{alignSelf: 'center', maxWidth: 280 }}
                         />
 
                         <Text style={form.label}>Time</Text>
-                        <DateTimePicker 
-                            value={time} 
-                            mode="time" 
-                            display="spinner" 
+                        <TouchableOpacity
+                            onPress={openSmartPlanTimePicker}
+                            style={[form.typeButton, {justifyContent: 'flex-start', alignItems: 'flex-start'}]}
+                        >
+                            <Text style={form.typeButtonText}>
+                                {format(time, 'h:mm a')}
+                            </Text>
+                        </TouchableOpacity>
+
+                        <DateTimePickerModal
+                            isVisible={isSmartPlanTimePickerVisible}
+                            mode="time"
+                            date={time}
+                            onConfirm={confirmSmartPlanTime}
+                            onCancel={closeSmartPlanTimePicker}
+                            display="spinner"
                             themeVariant="dark"
-                            onChange={(event, selectedTime) => selectedTime && setTime(selectedTime)}
-                            style={{alignSelf: 'center', maxWidth: 280 }}
                         />
 
                         <TouchableOpacity

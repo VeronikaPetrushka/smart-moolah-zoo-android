@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, Alert, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { zoo, form } from '../smartconstszoo/smartstyles';
 import { backbutton, clear } from '../smartimprtszoo/smartimgszoo';
@@ -10,6 +10,13 @@ const Smartaddvisitors = () => {
     const navigation = useNavigation();
     const [price, setPrice] = useState(null);
     const [date, setDate] = useState(new Date());
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    const handleUnifiedConfirm = (selectedDate) => {
+        const trimmed = new Date(selectedDate.setHours(0, 0, 0, 0));
+        setDate(trimmed);
+        setDatePickerVisibility(false);
+    };
 
     const formatDate = (dateObj) => {
         const dd = String(dateObj.getDate()).padStart(2, '0');
@@ -57,14 +64,23 @@ const Smartaddvisitors = () => {
 
             <Text style={zoo.mainTitle}>Add visitors</Text>
 
-            <Text style={form.label}>Arrival date</Text>
-            <DateTimePicker 
-                value={date} 
-                mode="date" 
-                display="spinner" 
+            <TouchableOpacity
+                onPress={() => setDatePickerVisibility(true)}
+                style={[
+                    form.typeButton,
+                    { justifyContent: 'flex-start', alignItems: 'flex-start' }
+                ]}
+            >
+                <Text style={form.typeButtonText}>{formatDate(date)}</Text>
+            </TouchableOpacity>
+
+            <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                date={date}
+                onConfirm={handleUnifiedConfirm}
+                onCancel={() => setDatePickerVisibility(false)}
                 themeVariant="dark"
-                onChange={(event, selectedDate) => selectedDate && setDate(selectedDate)}
-                style={{alignSelf: 'center', maxWidth: 280 }}
             />
 
             <Text style={form.label}>Price ($)</Text>
