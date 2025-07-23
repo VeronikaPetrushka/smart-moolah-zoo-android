@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format } from 'date-fns';
 import { zoo, form, card } from '../smartconstszoo/smartstyles';
-import { backbutton, checked, setarow } from '../smartimprtszoo/smartimgszoo';
+import { backbutton, checked, nothingadded, setarow } from '../smartimprtszoo/smartimgszoo';
 
 const Smartaddplan = ({ plan }) => {
     const navigation = useNavigation();
@@ -166,7 +166,7 @@ const Smartaddplan = ({ plan }) => {
                 step === 1 && (
                     <ScrollView style={{ width: '100%' }}>
                         {
-                            animals.length > 0 ? (
+                            filteredAnimals.length > 0 ? (
                                 <View style={{width: '100%'}}>
                                     {
                                         filteredAnimals.map((animal, i) => (
@@ -354,8 +354,9 @@ const Smartaddplan = ({ plan }) => {
                     </TouchableOpacity>
                 ) : (
                         <TouchableOpacity
-                            style={[zoo.button, {bottom: 50}]}
+                            style={[zoo.button, {bottom: 50}, !category && {opacity: 0.5}]}
                             onPress={() => step < 2 ? setStep(step + 1) : saveAnimalplan()}
+                            disabled={!category}
                         >
                             <Text style={zoo.buttonText}>Done</Text>
                         </TouchableOpacity>
